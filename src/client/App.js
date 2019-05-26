@@ -10,6 +10,7 @@ import { Container, Row, Col } from 'react-bootstrap';
 import MainNavbar from './components/MainNavbar';
 import Register from './components/Register';
 import Login from './components/Login';
+import AdminView from './components/admin/AdminView';
 // import Example from './components/Collapse';
 // import AdminView from './components/_admin/AdminView';
 
@@ -52,7 +53,7 @@ class App extends Component {
                     props => (
                       <Register
                         {...props}
-                        drizzle ={this.props.drizzle}
+                        drizzle={this.props.drizzle}
                         drizzleState={this.state.drizzleState}
                       />
                     )}
@@ -64,7 +65,7 @@ class App extends Component {
                     props => (
                       <Login
                         {...props}
-                        drizzle ={this.props.drizzle}
+                        drizzle={this.props.drizzle}
                         drizzleState={this.state.drizzleState}
                       />
                     )}
@@ -76,12 +77,27 @@ class App extends Component {
                     props => (
                       <Login
                         {...props}
-                        drizzle ={this.props.drizzle}
+                        drizzle={this.props.drizzle}
                         drizzleState={this.state.drizzleState}
                       />
                     )}
                 />
-                
+              </Col>
+            </Row>
+            <Row className="justify-content-md-center">
+              <Col sm={6}>
+                <Route
+                  path="/admin"
+                  exact
+                  render={
+                      props => (
+                        <AdminView
+                          {...props}
+                          drizzle={this.props.drizzle}
+                          drizzleState={this.state.drizzleState}
+                        />
+                      )}
+                />
               </Col>
             </Row>
           </Container>

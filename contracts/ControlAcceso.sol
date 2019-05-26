@@ -4,6 +4,7 @@ contract ControlAcceso {
     address public owner;
     address nullAddress = 0x0000000000000000000000000000000000000000;
     uint public userCount;
+    uint public actualUserCount;
     mapping(address => User) public addressToUser;
     // mapping(uint => address) public idToUserAddress;
     address[] public usersArray;
@@ -16,26 +17,34 @@ contract ControlAcceso {
         uint id;
         bool admin;
         uint creationDate;
+        uint state;
     }
 
     event CreateUser(
         address userAddress,
         string username,
         uint id,
-        bool admin
+        bool admin,
+        uint state
     );
 
     event RemoveUser(
         address userAddress
     );
 
+    event ChangeStateUser(
+        address _userAddress,
+        uint _newState
+    );
+
     constructor() public {
         owner = msg.sender;
         userCount = 1;
-        User memory _newUser = User(owner, "admin", userCount, true, now);
+        actualUserCount = 1;
+        User memory _newUser = User(owner, "admin", userCount, true, now, 2);
         addressToUser[owner] = _newUser;
         usersArray.push(msg.sender);
-        emit CreateUser(owner, "admin", userCount, true);
+        emit CreateUser(owner, "admin", userCount, true, 2);
     }
 
     modifier onlyOwner {
@@ -52,20 +61,22 @@ contract ControlAcceso {
     function addUser(address _userAddress, string memory _username, bool _admin) public onlyAdmin {
         require(checkUsername(_username) && addressToUser[_userAddress].id == 0, "This username already exist");
         userCount++;
-        User memory _newUser = User(_userAddress, _username, userCount,_admin, now);
+        actualUserCount++;
+        User memory _newUser = User(_userAddress, _username, userCount,_admin, now , 2);
         addressToUser[_userAddress] = _newUser;
         // idToUserAddress[userCount] = _userAddress;
         usersArray.push(_userAddress);
-        emit CreateUser(_userAddress, _username, userCount, _admin);
+        emit CreateUser(_userAddress, _username, userCount, _admin, 2);
     }
 
 
     /* 
         !!! Función de testeo, ELIMINAR O COMENTAR LUEGO.
     */
-    function getUser(uint index) public view returns (string memory){
+    function getUser(uint index) public view returns (string memory, address, uint){
         require(index >= 0 && index < userCount);
-        return addressToUser[usersArray[index]].username;
+        User memory _user = addressToUser[usersArray[index]];
+        return (_user.username, _user.userAddress, _user.state);
     }
 
     /*  Función que comprueba si un userame está en uso.
@@ -127,5 +138,11 @@ contract ControlAcceso {
             emit RemoveUser(_userAddress);
             userCount--;
         }
+    }
+
+    function setUserState(address _userAddress, uint _newState) public onlyAdmin {
+        addressToUser[_userAddress].state = _newState;
+        emit ChangeStateUser(_userAddress, _newState);
+
     }
 }

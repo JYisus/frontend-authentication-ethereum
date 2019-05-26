@@ -1,6 +1,6 @@
 import React from 'react';
 import {
-  Form, Button, Col, Row, Card
+  Form, Button, Col, Row, Card, Alert
 } from 'react-bootstrap';
 
 class Register extends React.Component {
@@ -62,19 +62,26 @@ class Register extends React.Component {
     // if it exists, then we display its value
     return (
       <>
+        <Alert variant="info">
+          <Alert.Heading>Crear cuenta en Metamask</Alert.Heading>
+          <p>
+            Para poder continuar, has de crear una cuenta en Metamask si no la tienes y añadir la
+            clave pública obtenida en el formulario de registro.
+          </p>
+        </Alert>
         <Card bg="light">
-          <Card.Header>Registro</Card.Header>
+          <Card.Header>Crear cuenta</Card.Header>
           <Card.Body>
             { /* <Card.Title className="d-flex justify-content-center">Registrarse</Card.Title> */ }
             <Form onSubmit={this.handleSubmit}>
               <Form.Group as={Row} controlId="formPlaintextNewUserName">
                 <Col sm="12">
-                  <Form.Control name="newUserAddress" plaintext placeholder="address" ref={this.newUserAddress} />
+                  <Form.Control name="newUserName" plaintext placeholder="username" ref={this.newUserName} />
                 </Col>
               </Form.Group>
               <Form.Group as={Row} controlId="formPlaintextNewUserName">
                 <Col sm="12">
-                  <Form.Control name="newUserName" plaintext placeholder="username" ref={this.newUserName} />
+                  <Form.Control name="newUserAddress" plaintext placeholder="address" ref={this.newUserAddress} />
                 </Col>
               </Form.Group>
 

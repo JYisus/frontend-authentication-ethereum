@@ -16,10 +16,10 @@ function register(req, res, next) {
   const name = req.body.hostname;
   const address = req.body.hostAddress;
 
-  ControlAcceso.methods.addUser(address, name, false).send({ from: defaultAccount, gas: 6721975 }, 
+  ControlAcceso.methods.addUser(address, name, false).send({ from: defaultAccount, gas: 6721975 },
     (error, result) => {
-      console.log(error);
-      console.log(result);
+      // console.log(error);
+      // console.log(result);
       if (result) {
         res.status(200).json({ status: 'success', message: 'host registrado correcamente ' });
       } else {
@@ -34,8 +34,8 @@ function login(req, res, next) {
   const signedMessage = req.body.sm;
   const address = req.body.a;
 
-  let key = web3.eth.accounts.recover(message, signedMessage);
-  console.log(key)
+  const key = web3.eth.accounts.recover(message, signedMessage);
+  console.log(key);
   if (key == address) {
     // const token = jwt.createToken(user);
     ControlAcceso.methods.addressToUser(address).call({ from: defaultAccount })

@@ -14,5 +14,6 @@ app.get('/api/getUsername', (req, res) => res.send({ username: os.userInfo().use
 app.post('/api/register', controlAcceso.register);
 app.post('/api/delete', controlAcceso.removeHost);
 app.post('/api/login', controlAcceso.login);
+app.post('/api/getNonce', controlAcceso.getNonce);
 
 app.listen(process.env.PORT || 8080, () => console.log(`Listening on port ${process.env.PORT || 8080}!`));

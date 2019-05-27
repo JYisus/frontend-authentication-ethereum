@@ -83,17 +83,45 @@ class UserRow extends React.Component {
 
     console.log(request && request);
     // console.log(request2 && request2)
+    let buttons;
+    if (request && request.value[2] == 2) {
+      buttons = (
+        <td>
+          <Button onClick={this.handleAccept.bind(this, request && request.value)} variant="success" size="sm">Aceptar</Button>
+          <br />  
+          <Button onClick={this.handleCancel.bind(this, request && request.value)} variant="danger" size="sm">Cancelar</Button>
+        </td>
+      );
+    } else if (request && request.value[2] == 1) {
+      buttons = (
+        <td>
+          <br /> 
+          <Button onClick={this.handleCancel.bind(this, request && request.value)} variant="danger" size="sm">Cancelar</Button>
+        </td>
+      );
+    } else {
+      buttons = (
+        <td>
+          <br />
+          <p>Cancelado</p>
+        </td>
+      );
+    }
+
 
     // if it exists, then we display its value
     return (
       <tr>
-        <td><br />{(request && request.value != null) && request.value[0]}</td>
-        <td><br />{(request && request.value != null) && request.value[1]}</td>
         <td>
-          <Button onClick={this.handleAccept.bind(this, request && request.value)} variant="success" size="sm">Aceptar</Button>
           <br />
-          <Button onClick={this.handleCancel.bind(this, request && request.value)} variant="danger" size="sm">Cancelar</Button>
+          {(request && request.value != null) && request.value[0]}
         </td>
+        <td>
+          <br />
+          {(request && request.value != null) && request.value[1]}
+        </td>
+        {buttons}
+
       </tr>
     );
   }

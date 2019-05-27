@@ -25,24 +25,40 @@ class Login extends React.Component {
     // let drizzle know we want to watch the `myString` method
     const message = 'Fire, walk with me.';
     // let hash = web3.utils.sha3(message);
-    web3.eth.personal.sign(web3.utils.utf8ToHex(message), address, 'testpassword')
-      .then((signedMessage) => {
-        fetch('/api/login', {
-          method: 'POST',
-          headers: {
-            'Accept': 'application/json',
-            'Content-Type': 'application/json',
-          },
-          body: JSON.stringify({
-            m: message,
-            sm: signedMessage,
-            a: address
-          })
-        })
-          .then((res) => {
-            res.json()
-              .then((result) => {
-                console.log(result.data);
+    fetch('/api/getNonce', {
+      method: 'POST',
+      headers: {
+        'Accept': 'application/json',
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        a: address
+      })
+    })
+      .then((res1) => {
+        res1.json()
+          .then((result1) => {
+            console.log(result1.nonce)
+            web3.eth.personal.sign(web3.utils.utf8ToHex(`${result1.nonce}`), address, 'testpassword')
+              .then((signedMessage) => {
+                fetch('/api/login', {
+                  method: 'POST',
+                  headers: {
+                    'Accept': 'application/json',
+                    'Content-Type': 'application/json',
+                  },
+                  body: JSON.stringify({
+                    m: message,
+                    sm: signedMessage,
+                    a: address
+                  })
+                })
+                  .then((res) => {
+                    res.json()
+                      .then((result) => {
+                        console.log(result.data);
+                      });
+                  });
               });
           });
       });

@@ -18,6 +18,7 @@ contract ControlAcceso {
         bool admin;
         uint creationDate;
         uint state;
+        uint nonce;
     }
 
     event CreateUser(
@@ -32,19 +33,24 @@ contract ControlAcceso {
         address userAddress
     );
 
-    event ChangeStateUser(
-        address _userAddress,
-        uint _newState
+    event ChangeUserState(
+        address userAddress,
+        uint state
+    );
+
+    event ChangeUserNonce(
+        address userAddress,
+        uint nonce
     );
 
     constructor() public {
         owner = msg.sender;
         userCount = 1;
         actualUserCount = 1;
-        User memory _newUser = User(owner, "admin", userCount, true, now, 2);
+        User memory _newUser = User(owner, "admin", userCount, true, now, 1, 0);
         addressToUser[owner] = _newUser;
         usersArray.push(msg.sender);
-        emit CreateUser(owner, "admin", userCount, true, 2);
+        emit CreateUser(owner, "admin", userCount, true, 1);
     }
 
     modifier onlyOwner {
@@ -58,11 +64,11 @@ contract ControlAcceso {
         _;
     }
 
-    function addUser(address _userAddress, string memory _username, bool _admin) public onlyAdmin {
+    function addUser(address _userAddress, string memory _username, bool _admin, uint _nonce) public onlyAdmin {
         require(checkUsername(_username) && addressToUser[_userAddress].id == 0, "This username already exist");
         userCount++;
         actualUserCount++;
-        User memory _newUser = User(_userAddress, _username, userCount,_admin, now , 2);
+        User memory _newUser = User(_userAddress, _username, userCount,_admin, now , 2, _nonce);
         addressToUser[_userAddress] = _newUser;
         // idToUserAddress[userCount] = _userAddress;
         usersArray.push(_userAddress);
@@ -142,7 +148,11 @@ contract ControlAcceso {
 
     function setUserState(address _userAddress, uint _newState) public onlyAdmin {
         addressToUser[_userAddress].state = _newState;
-        emit ChangeStateUser(_userAddress, _newState);
+        emit ChangeUserState(_userAddress, _newState);
+    }
 
+    function setUserNonce(address _userAddress, uint _newNonce) public onlyAdmin {
+        addressToUser[_userAddress].nonce = _newNonce;
+        emit ChangeUserNonce(_userAddress, _newNonce);
     }
 }

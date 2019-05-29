@@ -2,12 +2,13 @@ const Web3 = require('web3');
 const jwt = require('../services/jwt');
 
 const web3 = new Web3(new Web3.providers.HttpProvider('http://127.0.0.1:7545'));
-const defaultAccount = '0x1D9E020B8951337487B85273E01fD27425b45f57';
+// const defaultAccount = '0x1D9E020B8951337487B85273E01fD27425b45f57';
+const defaultAccount = '0xDe4c1747Be9CfCc66B0F10c583B87dD59Cd369D3';
 web3.eth.defaultAccount = defaultAccount;
 
 const contract = require('../../contracts/ControlAcceso.json');
 
-const ControlAcceso = web3.eth.Contract(contract.abi, '0x50dced960691aeA590E0759e7547e0A013A53D1b');
+const ControlAcceso = web3.eth.Contract(contract.abi, '0x6bed45bDeFd94cec6160c782495277c0c2101F29');
 
 // web3.eth.getAccounts(console.log);
 function getNonce(req, res, next) {
@@ -75,7 +76,6 @@ function login(req, res, next) {
                     res.status(400).json({ status: 'error', message: 'username already exist' });
                   }
                 });
-              
             });
         } else {
           res.status(400).json({ status: 'error', message: 'no cool' });
@@ -85,7 +85,6 @@ function login(req, res, next) {
       }
     });
 
-  
   /* web3.eth.personal.ecRecover(web3.utils.utf8ToHex(message), signedMessage)
     .then((result) => {
       if (result) {

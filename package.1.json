@@ -27,7 +27,7 @@
     "react-dom": "^16.5.2",
     "react-router-dom": "^5.0.0",
     "react-scripts": "^3.0.1",
-    "truffle": "^5.0.19",
+    "truffle": "^5.0.18",
     "web3": "^1.0.0-beta.55"
   },
   "devDependencies": {
